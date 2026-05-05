@@ -121,18 +121,19 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
           <Button
             variant="outline"
             size="sm"
-            className="hidden sm:flex gap-1.5"
-            asChild
+            nativeButton={false}
+            className="hidden sm:inline-flex gap-1.5"
+            render={
+              <a
+                href="https://www.linkedin.com/in/anes-djumisic/"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="View LinkedIn profile"
+              />
+            }
           >
-            <a
-              href="https://www.linkedin.com/in/anes-djumisic/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="View LinkedIn profile"
-            >
-              <FileText size={15} />
-              CV
-            </a>
+            <FileText size={15} />
+            CV
           </Button>
 
           {/* Mobile hamburger */}
