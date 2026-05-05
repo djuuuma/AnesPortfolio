@@ -80,7 +80,7 @@ export default function Projects() {
             viewport={{ once: true }}
             transition={{ delay: i * 0.08, duration: 0.4 }}
           >
-            <Card className="group overflow-hidden border-muted hover:border-primary/50 transition-all duration-300 h-full flex flex-col">
+            <Card className="group overflow-hidden border-muted hover:border-primary/50 hover:shadow-md transition-all duration-300 h-full flex flex-col cursor-pointer">
               <ProjectPreview project={project} gradient={gradients[i % gradients.length]} />
               <CardHeader>
                 <div className="flex justify-between items-start">
@@ -92,7 +92,7 @@ export default function Projects() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Open ${project.title} in a new tab`}
-                    className="p-2 bg-muted rounded-lg hover:bg-primary hover:text-primary-foreground transition-all"
+                    className="p-2 bg-muted rounded-lg hover:bg-primary hover:text-primary-foreground transition-all cursor-pointer"
                   >
                     <ExternalLink size={18} aria-hidden="true" />
                   </a>

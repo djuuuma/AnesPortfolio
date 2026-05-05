@@ -14,6 +14,30 @@ import Experience from "./pages/Experience";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
+function AnimatedRoutes() {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait">
+      <motion.main
+        key={location.pathname}
+        className="pt-16"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -6 }}
+        transition={{ duration: 0.2, ease: "easeInOut" }}
+      >
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/experience" element={<Experience />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </motion.main>
+    </AnimatePresence>
+  );
+}
+
 const navLinks = [
   { label: "Projects", to: "/projects" },
   { label: "Experience", to: "/experience" },
@@ -190,15 +214,7 @@ function Layout() {
         <ScrollToTop />
         <GlitchTransition />
         <Navbar dark={dark} setDark={updateDark} />
-        <main className="pt-16">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/experience" element={<Experience />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
+        <AnimatedRoutes />
         <footer className="py-12 border-t">
           <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
             <p className="text-sm text-muted-foreground">

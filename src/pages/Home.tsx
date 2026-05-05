@@ -1,11 +1,14 @@
+import { lazy, Suspense } from "react";
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
-import { FolderGit2, Clock, Users, Layers, MousePointerClick } from "lucide-react";
+import { FolderGit2, Clock, Users, Layers, MapPin, Sparkles, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Gravity, MatterBody } from "@/components/ui/gravity";
 import Bio from "../components/Bio";
 import { useHackathonMode } from "../context/HackathonContext";
+
+// Lazy-load the physics playground so matter-js ships in a separate async chunk.
+const SkillsPlayground = lazy(() => import("../components/SkillsPlayground"));
 
 // Save your photo as public/avatar.jpg to use a local copy that won't expire.
 const AVATAR_SRC = "/avatar.jpg";
@@ -108,39 +111,113 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Skills Section — interactive physics playground */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="text-center mb-6">
-          <p className="text-xs uppercase tracking-[0.2em] font-bold text-muted-foreground mb-2">
-            Tech Stack
-          </p>
-          <h2 className="text-2xl font-bold tracking-tight">Tools & Technologies</h2>
-          <p className="mt-3 inline-flex items-center gap-1.5 text-xs text-muted-foreground font-mono">
-            <MousePointerClick size={13} aria-hidden />
-            drag the chips around
-          </p>
-        </div>
+      {/* About / Philosophy Section */}
+      <section className="container mx-auto px-4 py-20 border-t">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 items-start">
+          {/* Left — personal statement */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="space-y-6"
+          >
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] font-bold text-muted-foreground mb-2">
+                Philosophy
+              </p>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tighter">A bit about me</h2>
+            </div>
 
-        <div className="relative w-full h-[420px] sm:h-[460px] md:h-[500px] rounded-2xl border bg-muted/20 overflow-hidden">
-          <Gravity gravity={{ x: 0, y: 1 }} className="w-full h-full">
-            {skills.map((skill) => (
-              <MatterBody
-                key={skill.label}
-                matterBodyOptions={{ friction: 0.5, restitution: 0.2 }}
-                x={skill.x}
-                y={skill.y}
-                angle={skill.angle}
-              >
-                <div
-                  className={`select-none whitespace-nowrap rounded-full px-5 py-2.5 text-sm sm:text-base md:text-lg font-medium shadow-sm hover:cursor-grab active:cursor-grabbing ${skill.color}`}
-                >
-                  {skill.label}
-                </div>
-              </MatterBody>
-            ))}
-          </Gravity>
+            <p className="text-muted-foreground leading-relaxed">
+              I build web products that actually work — clean, fast, and purposeful. Based in
+              Sarajevo, I partner with local businesses and remote clients to turn ideas into
+              polished digital experiences that serve real people.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              My focus sits at the intersection of React, design systems, and the new generation
+              of agentic AI tools. I believe good software is invisible to the user: it just
+              responds, performs, and gets out of the way.
+            </p>
+
+            <div className="flex flex-wrap gap-3 pt-2">
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                <MapPin size={12} aria-hidden />
+                Sarajevo, BA
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" aria-hidden />
+                Open to work
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Right — two quick lists */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="space-y-8"
+          >
+            <div className="space-y-3">
+              <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                <Sparkles size={13} aria-hidden />
+                Currently exploring
+              </p>
+              <ul className="space-y-2">
+                {[
+                  "Agentic AI coding workflows",
+                  "Design systems & component architecture",
+                  "Next.js App Router & server components",
+                  "Core Web Vitals & performance budgets",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm">
+                    <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary shrink-0" aria-hidden />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="space-y-3">
+              <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                <Heart size={13} aria-hidden />
+                I care about
+              </p>
+              <ul className="space-y-2">
+                {[
+                  "Accessibility as a default, not an afterthought",
+                  "Code that reads like prose",
+                  "Honest, direct communication with clients",
+                  "Shipping things that actually launch",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm">
+                    <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary shrink-0" aria-hidden />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
         </div>
       </section>
+
+      {/* Skills Section — lazy-loaded physics playground */}
+      <Suspense
+        fallback={
+          <section className="container mx-auto px-4 py-16">
+            <div className="text-center mb-6 space-y-2 animate-pulse">
+              <div className="h-3 w-24 bg-muted rounded-full mx-auto" />
+              <div className="h-6 w-52 bg-muted rounded-full mx-auto" />
+              <div className="h-3 w-36 bg-muted rounded-full mx-auto" />
+            </div>
+            <div className="w-full h-[420px] sm:h-[460px] md:h-[500px] rounded-2xl border bg-muted/20 animate-pulse" />
+          </section>
+        }
+      >
+        <SkillsPlayground />
+      </Suspense>
     </>
   );
 }
