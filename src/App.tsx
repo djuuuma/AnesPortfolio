@@ -1,14 +1,12 @@
 
 import { motion } from "motion/react";
-import { GraduationCap, Code2, Trophy, Mail, FileText, Github, Linkedin, ExternalLink } from "lucide-react";
+import { Code2, Mail, FileText, Github, Linkedin, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PROJECTS, ACHIEVEMENTS, EXPERIENCES } from "./data";
+import { PROJECTS, EXPERIENCES } from "./data";
 
 export default function App() {
   return (
@@ -28,7 +26,6 @@ export default function App() {
           </motion.div>
           <div className="hidden md:flex items-center gap-6 text-sm font-medium opacity-70">
             <a href="#projects" className="hover:text-primary transition-colors">Projects</a>
-            <a href="#academia" className="hover:text-primary transition-colors">Academia</a>
             <a href="#experience" className="hover:text-primary transition-colors">Experience</a>
             <a href="#contact" className="hover:text-primary transition-colors">Contact</a>
           </div>
@@ -49,8 +46,8 @@ export default function App() {
             className="mb-8"
           >
             <Avatar className="w-32 h-32 border-4 border-muted">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>UNSA</AvatarFallback>
+              <AvatarImage src="https://media.licdn.com/dms/image/v2/D4D03AQH4Epya9pDMyQ/profile-displayphoto-crop_800_800/B4DZwKAvVvKUAI-/0/1769694496794?e=1779321600&v=beta&t=Tz9sK1NJZc8EMlr3eusM33m5oCVvJC9u4eQoXZk2wfg" />
+              <AvatarFallback>AĐ</AvatarFallback>
             </Avatar>
           </motion.div>
           <motion.h1 
@@ -59,7 +56,7 @@ export default function App() {
             transition={{ delay: 0.2 }}
             className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 bg-gradient-to-b from-foreground to-foreground/50 bg-clip-text text-transparent"
           >
-            Student at ETF Sarajevo
+            Anes Đumišić
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -67,8 +64,7 @@ export default function App() {
             transition={{ delay: 0.3 }}
             className="text-xl text-muted-foreground max-w-2xl mb-10"
           >
-            Passionate Software Engineer focusing on full-stack development, 
-            embedded systems, and academic excellence within the Computing and Informatics department.
+            Focusing on modern front-end architectures and agentic coding workflows. Exploring the intersection of React, Next.js, and autonomous AI tools to build efficient, scalable web solutions.
           </motion.p>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -89,10 +85,10 @@ export default function App() {
         <section className="bg-muted/30 border-y py-12">
           <div className="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { label: "Completed Projects", value: "4+" },
-              { label: "GPA (Average Grade)", value: "9.2/10" },
-              { label: "Faculty Courses", value: "30+" },
-              { label: "Years of Coding", value: "5+" }
+              { label: "Completed Projects", value: "5+" },
+              { label: "Years of Experience", value: "2+" },
+              { label: "Clients", value: "10+" },
+              { label: "Technologies", value: "8+" }
             ].map((stat, i) => (
               <div key={i} className="flex flex-col items-center">
                 <span className="text-3xl font-bold font-mono">{stat.value}</span>
@@ -106,9 +102,8 @@ export default function App() {
         <section className="container mx-auto px-4 py-24">
           <Tabs defaultValue="projects" className="w-full">
             <div className="flex justify-center mb-12">
-              <TabsList className="grid w-full max-w-md grid-cols-3 h-12 p-1 bg-muted rounded-full">
+              <TabsList className="grid w-full max-w-xs grid-cols-2 h-12 p-1 bg-muted rounded-full">
                 <TabsTrigger value="projects" className="rounded-full">Projects</TabsTrigger>
-                <TabsTrigger value="academia" className="rounded-full">Academia</TabsTrigger>
                 <TabsTrigger value="experience" className="rounded-full">Careers</TabsTrigger>
               </TabsList>
             </div>
@@ -146,60 +141,6 @@ export default function App() {
                     </Card>
                   </motion.div>
                 ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="academia" id="academia">
-              <div className="max-w-3xl mx-auto space-y-8">
-                <div className="space-y-4">
-                   <h3 className="text-sm uppercase tracking-[0.2em] font-bold text-muted-foreground mb-6">Academic Achievements</h3>
-                   {ACHIEVEMENTS.map((ach, i) => (
-                     <Card key={i} className="border-l-4 border-l-primary bg-muted/20">
-                       <CardHeader className="p-6">
-                         <div className="flex justify-between items-start mb-2">
-                           <div>
-                             <CardTitle className="text-xl">{ach.title}</CardTitle>
-                             <CardDescription className="flex items-center gap-2 mt-1">
-                               <GraduationCap size={14} />
-                               {ach.issuer}
-                             </CardDescription>
-                           </div>
-                           <Badge variant="outline">{ach.date}</Badge>
-                         </div>
-                         <p className="text-sm opacity-80 leading-relaxed">{ach.description}</p>
-                       </CardHeader>
-                     </Card>
-                   ))}
-                </div>
-                
-                <Separator />
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                   <Card className="bg-primary/5 border-primary/20">
-                      <CardHeader>
-                        <CardTitle className="text-lg flex items-center gap-2">
-                          <Trophy className="text-primary" size={20} />
-                          Golden Badge Potential
-                        </CardTitle>
-                        <CardDescription>University of Sarajevo Standard</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm opacity-80">Consistently achieving top scores in core engineering modules including Electromagnetic Fields, Analysis and Design of Algorithms, and Operating Systems.</p>
-                      </CardContent>
-                   </Card>
-                   <Card className="bg-primary/5 border-primary/20">
-                      <CardHeader>
-                        <CardTitle className="text-lg flex items-center gap-2">
-                           <Code2 className="text-primary" size={20} />
-                           Technical Excellence
-                        </CardTitle>
-                        <CardDescription>Faculty Competition</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm opacity-80">Represented the faculty at regional engineering competitions focusing on competitive programming and system optimization.</p>
-                      </CardContent>
-                   </Card>
-                </div>
               </div>
             </TabsContent>
 
@@ -254,15 +195,15 @@ export default function App() {
                   <div className="space-y-4">
                     <div className="flex items-center gap-4">
                       <Mail size={20} />
-                      <span>delimano.lonac@gmail.com</span>
+                      <span>djumisic.anes@gmail.com</span>
                     </div>
                     <div className="flex items-center gap-4">
                       <Linkedin size={20} />
-                      <span>linkedin.com/in/student-etf</span>
+                      <span>linkedin.com/in/anes-djumisic</span>
                     </div>
                     <div className="flex items-center gap-4">
                       <Github size={20} />
-                      <span>github.com/etf-dev</span>
+                      <span>github.com/djuuuma</span>
                     </div>
                   </div>
                 </div>
@@ -289,11 +230,10 @@ export default function App() {
 
       <footer className="py-12 border-t">
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-sm text-muted-foreground">© 2024 Electrotechnical Student Portfolio. Built for excellence.</p>
+          <p className="text-sm text-muted-foreground">© 2026 Anes Đumišić. Built for excellence.</p>
           <div className="flex gap-4 text-xs font-mono uppercase tracking-widest font-bold">
-            <a href="#" className="hover:text-primary transition-colors">Privacy</a>
-            <a href="#" className="hover:text-primary transition-colors">Terms</a>
-            <a href="#" className="hover:text-primary transition-colors">Faculty Info</a>
+            <a href="https://github.com/djuuuma" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">GitHub</a>
+            <a href="https://www.linkedin.com/in/anes-djumisic/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">LinkedIn</a>
           </div>
         </div>
       </footer>
