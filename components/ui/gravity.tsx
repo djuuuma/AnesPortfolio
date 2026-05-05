@@ -1,6 +1,7 @@
 import {
   createContext,
   forwardRef,
+  FC,
   ReactNode,
   useCallback,
   useContext,
@@ -22,7 +23,6 @@ import Matter, {
   Runner,
   World,
 } from "matter-js"
-// @ts-expect-error — poly-decomp has no published types
 import decomp from "poly-decomp"
 import SVGPathCommander from "svg-path-commander"
 
@@ -117,7 +117,7 @@ const GravityContext = createContext<{
   unregisterElement: (id: string) => void
 } | null>(null)
 
-const MatterBody = ({
+const MatterBody: FC<MatterBodyProps> = ({
   children,
   className,
   matterBodyOptions = {
@@ -132,7 +132,7 @@ const MatterBody = ({
   x = 0,
   y = 0,
   angle = 0,
-}: MatterBodyProps) => {
+}) => {
   const elementRef = useRef<HTMLDivElement>(null)
   const idRef = useRef(Math.random().toString(36).substring(7))
   const context = useContext(GravityContext)
