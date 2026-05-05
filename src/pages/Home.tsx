@@ -10,8 +10,7 @@ import { useHackathonMode } from "../context/HackathonContext";
 // Lazy-load the physics playground so matter-js ships in a separate async chunk.
 const SkillsPlayground = lazy(() => import("../components/SkillsPlayground"));
 
-// Save your photo as public/avatar.jpg to use a local copy that won't expire.
-const AVATAR_SRC = "/avatar.jpg";
+const AVATAR_SRC = "/anesphoto.png";
 
 const stats = [
   { label: "Client Projects", value: "4+", icon: FolderGit2 },
