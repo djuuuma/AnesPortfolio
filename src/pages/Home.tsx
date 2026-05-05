@@ -20,20 +20,6 @@ const stats = [
   { label: "Technologies", value: "10+", icon: Layers },
 ];
 
-// Each chip starts at a roughly hand-tuned spot inside the playground so the
-// pile settles into a natural, non-overlapping heap rather than a single column.
-const skills = [
-  { label: "React",           x: "18%", y: "8%",  angle: -6, color: "bg-[#0ea5e9] text-white hackathon:bg-foreground hackathon:text-background" },
-  { label: "Next.js",         x: "38%", y: "5%",  angle: 4,  color: "bg-foreground text-background" },
-  { label: "TypeScript",      x: "62%", y: "8%",  angle: -4, color: "bg-[#3178C6] text-white hackathon:bg-foreground hackathon:text-background" },
-  { label: "Tailwind CSS",    x: "82%", y: "10%", angle: 8,  color: "bg-[#06b6d4] text-white hackathon:bg-foreground hackathon:text-background" },
-  { label: "Motion",          x: "12%", y: "28%", angle: 5,  color: "bg-[#8b5cf6] text-white hackathon:bg-foreground hackathon:text-background" },
-  { label: "Vite",            x: "32%", y: "32%", angle: -8, color: "bg-primary text-primary-foreground" },
-  { label: "Git",             x: "55%", y: "30%", angle: 6,  color: "bg-[#f97316] text-white hackathon:bg-foreground hackathon:text-background" },
-  { label: "Python",          x: "78%", y: "32%", angle: -3, color: "bg-[#facc15] text-black hackathon:bg-foreground hackathon:text-background" },
-  { label: "Google Sheets",   x: "28%", y: "55%", angle: 2,  color: "bg-[#16a34a] text-white hackathon:bg-foreground hackathon:text-background" },
-  { label: "Microsoft Excel", x: "65%", y: "55%", angle: -5, color: "bg-[#107c41] text-white hackathon:bg-foreground hackathon:text-background" },
-];
 
 export default function Home() {
   const { isHackathonMode } = useHackathonMode();
