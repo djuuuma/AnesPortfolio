@@ -2,7 +2,6 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 @custom-variant dark (&:is(.dark *));
 @custom-variant hackathon (&:is([data-theme="hackathon"] *));
@@ -164,6 +163,13 @@
 @keyframes glitch-fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+@keyframes glitch-fade-out {
+  0%   { opacity: 0;   }
+  10%  { opacity: 1;   }
+  85%  { opacity: 1;   }
+  100% { opacity: 0;   }
 }
 
 @keyframes glitch-a {

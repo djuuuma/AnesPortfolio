@@ -15,8 +15,7 @@ interface HackathonContextType {
 
 const HackathonContext = createContext<HackathonContextType | null>(null);
 
-const GLITCH_DURATION_MS = 950;
-const THEME_FLIP_DELAY_MS = GLITCH_DURATION_MS / 2;
+const GLITCH_DURATION_MS = 700;
 
 function readStorage(): boolean {
   try {
@@ -26,9 +25,14 @@ function readStorage(): boolean {
   }
 }
 
-function writeStorage(value: boolean): void {
+function applyTheme(active: boolean): void {
+  if (active) {
+    document.documentElement.setAttribute("data-theme", "hackathon");
+  } else {
+    document.documentElement.removeAttribute("data-theme");
+  }
   try {
-    localStorage.setItem("hackathonMode", String(value));
+    localStorage.setItem("hackathonMode", String(active));
   } catch {
     /* storage unavailable */
   }
@@ -38,47 +42,30 @@ export function HackathonProvider({ children }: { children: ReactNode }) {
   const [isHackathonMode, setIsHackathonMode] = useState<boolean>(readStorage);
   const [isGlitching, setIsGlitching] = useState(false);
 
-  // Sync data-theme attribute + localStorage whenever mode changes
+  // Apply persisted theme on first paint
   useEffect(() => {
-    writeStorage(isHackathonMode);
-    if (isHackathonMode) {
-      document.documentElement.setAttribute("data-theme", "hackathon");
-    } else {
-      document.documentElement.removeAttribute("data-theme");
-    }
-  }, [isHackathonMode]);
-
-  // Apply persisted theme immediately on first render (no flash)
-  useEffect(() => {
-    if (readStorage()) {
-      document.documentElement.setAttribute("data-theme", "hackathon");
-    }
+    applyTheme(readStorage());
   }, []);
 
-  // Drive the glitch timing via useEffect so cleanup works correctly in
-  // StrictMode and rapid re-clicks are always properly cancelled.
+  // Auto-clear glitch after duration. Independent of any other logic.
   useEffect(() => {
     if (!isGlitching) return;
-
-    const t1 = setTimeout(() => {
-      setIsHackathonMode((prev) => !prev);
-    }, THEME_FLIP_DELAY_MS);
-
-    const t2 = setTimeout(() => {
-      setIsGlitching(false);
-    }, GLITCH_DURATION_MS);
-
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-    };
+    const id = window.setTimeout(() => setIsGlitching(false), GLITCH_DURATION_MS);
+    return () => window.clearTimeout(id);
   }, [isGlitching]);
 
-  // Toggle just kicks off the glitch — all timer logic lives in the effect above
+  /**
+   * Toggle is SYNCHRONOUS and DETERMINISTIC.
+   * State, DOM, and storage all update in a single tick.
+   * The glitch is purely cosmetic on top — it cannot block the toggle.
+   */
   const toggle = useCallback(() => {
-    setIsGlitching(false); // reset first (handles rapid double-click)
-    // Use rAF so the false→true transition is always a separate render
-    requestAnimationFrame(() => setIsGlitching(true));
+    setIsHackathonMode((current) => {
+      const next = !current;
+      applyTheme(next); // instant DOM + storage update
+      return next;
+    });
+    setIsGlitching(true);
   }, []);
 
   return (

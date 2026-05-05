@@ -30,11 +30,11 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
   return (
     <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+        {/* Logo — takes up its natural width */}
+        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex-1">
           <Link
             to="/"
-            className="flex items-center gap-2 font-bold text-xl tracking-tighter"
+            className="flex items-center gap-2 font-bold text-xl tracking-tighter w-fit"
           >
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground">
               <Code2 size={20} />
@@ -43,8 +43,8 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
           </Link>
         </motion.div>
 
-        {/* Desktop nav links */}
-        <div className="hidden md:flex items-center gap-6 text-sm font-medium">
+        {/* Desktop nav links — absolutely centered */}
+        <div className="hidden md:flex items-center gap-6 text-sm font-medium absolute left-1/2 -translate-x-1/2">
           {navLinks.map((link) => (
             <Link
               key={link.to}
