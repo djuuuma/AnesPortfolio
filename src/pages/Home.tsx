@@ -7,11 +7,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Bio from "../components/Bio";
 import { useHackathonMode } from "../context/HackathonContext";
 
+// Save your photo as public/avatar.jpg to use a local copy that won't expire.
+const AVATAR_SRC = "/avatar.jpg";
+
 const stats = [
-  { label: "Completed Projects", value: "5+", icon: FolderGit2 },
+  { label: "Client Projects", value: "4+", icon: FolderGit2 },
   { label: "Years of Experience", value: "2+", icon: Clock },
-  { label: "Clients", value: "10+", icon: Users },
-  { label: "Technologies", value: "8+", icon: Layers },
+  { label: "Clients Served", value: "4+", icon: Users },
+  { label: "Technologies", value: "10+", icon: Layers },
 ];
 
 const skills = [
@@ -29,6 +32,7 @@ const skills = [
 
 export default function Home() {
   const { isHackathonMode } = useHackathonMode();
+
   return (
     <>
       {/* Hero Section */}
@@ -39,11 +43,12 @@ export default function Home() {
           transition={{ duration: 0.5 }}
           className="mb-8"
         >
-          <Avatar className="w-32 h-32 border-4 border-muted">
-            <AvatarImage src="https://media.licdn.com/dms/image/v2/D4D03AQH4Epya9pDMyQ/profile-displayphoto-crop_800_800/B4DZwKAvVvKUAI-/0/1769694496794?e=1779321600&v=beta&t=Tz9sK1NJZc8EMlr3eusM33m5oCVvJC9u4eQoXZk2wfg" />
-            <AvatarFallback>AĐ</AvatarFallback>
+          <Avatar className="w-32 h-32 border-4 border-primary/20 shadow-lg shadow-primary/10">
+            <AvatarImage src={AVATAR_SRC} alt="Anes Đumišić" />
+            <AvatarFallback className="text-2xl font-bold">AĐ</AvatarFallback>
           </Avatar>
         </motion.div>
+
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -52,6 +57,7 @@ export default function Home() {
         >
           Anes Đumišić
         </motion.h1>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -81,17 +87,20 @@ export default function Home() {
       {/* Stats Strip */}
       <section className="bg-muted/30 border-y py-12">
         <div className="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
-          {stats.map((stat, i) => (
+          {stats.map((stat) => (
             <motion.div
-              key={i}
+              key={stat.label}
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
               className="flex flex-col items-center gap-2"
             >
               <stat.icon size={22} className="text-primary" />
               <span className="text-3xl font-bold font-mono">{stat.value}</span>
-              <span className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">{stat.label}</span>
+              <span className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">
+                {stat.label}
+              </span>
             </motion.div>
           ))}
         </div>
@@ -100,7 +109,9 @@ export default function Home() {
       {/* Skills Section */}
       <section className="container mx-auto px-4 py-16">
         <div className="text-center mb-8">
-          <p className="text-xs uppercase tracking-[0.2em] font-bold text-muted-foreground mb-2">Tech Stack</p>
+          <p className="text-xs uppercase tracking-[0.2em] font-bold text-muted-foreground mb-2">
+            Tech Stack
+          </p>
           <h2 className="text-2xl font-bold tracking-tight">Tools & Technologies</h2>
         </div>
         <div className="flex flex-wrap justify-center gap-3 max-w-2xl mx-auto">

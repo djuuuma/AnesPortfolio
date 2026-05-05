@@ -2,12 +2,39 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
+
+    <title>Anes Đumišić — Frontend Engineer</title>
+    <meta name="description" content="Frontend engineer based in Sarajevo specialising in React, Next.js, and TypeScript. Building modern web apps and agentic AI workflows." />
+    <meta name="author" content="Anes Đumišić" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Anes Đumišić — Frontend Engineer" />
+    <meta property="og:description" content="Frontend engineer based in Sarajevo specialising in React, Next.js, and TypeScript. Building modern web apps and agentic AI workflows." />
+    <meta property="og:url" content="https://anes-djumisic.vercel.app" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Anes Đumišić — Frontend Engineer" />
+    <meta name="twitter:description" content="Frontend engineer based in Sarajevo specialising in React, Next.js, and TypeScript." />
+
+    <!-- Theme colour for mobile browsers -->
+    <meta name="theme-color" content="#e07b39" />
+
+    <!-- Anti-FOUC: apply stored theme before first paint -->
+    <script>
+      try {
+        var t = localStorage.getItem("theme");
+        if (t === "dark" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+          document.documentElement.classList.add("dark");
+        }
+      } catch (_) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

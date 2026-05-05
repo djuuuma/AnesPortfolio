@@ -1,3 +1,4 @@
+import React from "react";
 import { useHackathonMode } from "../context/HackathonContext";
 
 interface BioData {
@@ -22,7 +23,7 @@ const bioData: BioData = {
   linkedin: "linkedin.com/in/anes-djumisic",
 };
 
-function JsonValue({ value }: { value: BioData[keyof BioData] }): JSX.Element {
+function JsonValue({ value }: { value: BioData[keyof BioData] }): React.ReactElement {
   if (Array.isArray(value)) {
     return (
       <span className="text-[#ffcc00]">

@@ -4,6 +4,7 @@ export interface Project {
   description: string;
   link: string;
   tags: string[];
+  /** Optional screenshot — add a path like "/screenshots/zrno.jpg" (save to public/) or a URL */
   image?: string;
 }
 

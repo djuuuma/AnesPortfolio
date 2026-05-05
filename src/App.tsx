@@ -2,15 +2,17 @@ import { useState, useEffect } from "react";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { Code2, FileText, Moon, Sun, Menu, X, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, MotionConfig } from "motion/react";
 
 import { HackathonProvider, useHackathonMode } from "./context/HackathonContext";
 import GlitchTransition from "./components/GlitchTransition";
+import ScrollToTop from "./components/ScrollToTop";
 
 import Home from "./pages/Home";
 import Projects from "./pages/Projects";
 import Experience from "./pages/Experience";
 import Contact from "./pages/Contact";
+import NotFound from "./pages/NotFound";
 
 const navLinks = [
   { label: "Projects", to: "/projects" },
@@ -30,11 +32,11 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
   return (
     <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        {/* Logo — takes up its natural width */}
-        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex-1">
+        {/* Logo */}
+        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
           <Link
             to="/"
-            className="flex items-center gap-2 font-bold text-xl tracking-tighter w-fit"
+            className="flex items-center gap-2 font-bold text-xl tracking-tighter"
           >
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground">
               <Code2 size={20} />
@@ -43,8 +45,8 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
           </Link>
         </motion.div>
 
-        {/* Desktop nav links — absolutely centered */}
-        <div className="hidden md:flex items-center gap-6 text-sm font-medium absolute left-1/2 -translate-x-1/2">
+        {/* Desktop nav links */}
+        <div className="hidden md:flex items-center gap-6 text-sm font-medium">
           {navLinks.map((link) => (
             <Link
               key={link.to}
@@ -85,22 +87,28 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
               variant="ghost"
               size="icon"
               onClick={() => setDark(!dark)}
-              aria-label="Toggle dark mode"
+              aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
             >
               {dark ? <Sun size={18} /> : <Moon size={18} />}
             </Button>
           )}
 
-          {/* Download CV */}
+          {/* Download CV — shown but links to LinkedIn until CV is ready */}
           <Button
             variant="outline"
             size="sm"
-            className="hidden sm:flex gap-2 opacity-50 cursor-not-allowed"
-            title="CV coming soon"
-            disabled
+            className="hidden sm:flex gap-2"
+            asChild
           >
-            <FileText size={16} />
-            Download CV
+            <a
+              href="https://www.linkedin.com/in/anes-djumisic/"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="View LinkedIn profile"
+            >
+              <FileText size={16} />
+              View Profile
+            </a>
           </Button>
 
           {/* Mobile hamburger */}
@@ -155,50 +163,69 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
 }
 
 function Layout() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState<boolean>(() => {
+    try {
+      const stored = localStorage.getItem("theme");
+      if (stored) return stored === "dark";
+      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    } catch {
+      return false;
+    }
+  });
+
+  const updateDark = (value: boolean) => {
+    setDark(value);
+    try {
+      localStorage.setItem("theme", value ? "dark" : "light");
+    } catch {}
+  };
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
   }, [dark]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary selection:text-primary-foreground">
-      <GlitchTransition />
-      <Navbar dark={dark} setDark={setDark} />
-      <main className="pt-16">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/experience" element={<Experience />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
-      </main>
-      <footer className="py-12 border-t">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-sm text-muted-foreground">
-            © 2026 Anes Đumišić. Built for excellence.
-          </p>
-          <div className="flex gap-4 text-xs font-mono uppercase tracking-widest font-bold">
-            <a
-              href="https://github.com/djuuuma"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-primary transition-colors"
-            >
-              GitHub
-            </a>
-            <a
-              href="https://www.linkedin.com/in/anes-djumisic/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-primary transition-colors"
-            >
-              LinkedIn
-            </a>
+    <MotionConfig reducedMotion="user">
+      <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary selection:text-primary-foreground">
+        <ScrollToTop />
+        <GlitchTransition />
+        <Navbar dark={dark} setDark={updateDark} />
+        <main className="pt-16">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/experience" element={<Experience />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
+        <footer className="py-12 border-t">
+          <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+            <p className="text-sm text-muted-foreground">
+              © 2026 Anes Đumišić. Built for excellence.
+            </p>
+            <div className="flex gap-4 text-xs font-mono uppercase tracking-widest font-bold">
+              <a
+                href="https://github.com/djuuuma"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary transition-colors"
+              >
+                GitHub
+              </a>
+              <a
+                href="https://www.linkedin.com/in/anes-djumisic/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary transition-colors"
+              >
+                LinkedIn
+              </a>
+            </div>
           </div>
-        </div>
-      </footer>
-    </div>
+        </footer>
+      </div>
+    </MotionConfig>
   );
 }
 
