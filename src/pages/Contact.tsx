@@ -67,7 +67,8 @@ export default function Contact() {
   };
 
   return (
-    <section className="container mx-auto px-4 py-24">
+    <section className="px-4 py-24">
+      <div className="max-w-4xl mx-auto">
       <div className="mb-12">
         <p className="text-xs uppercase tracking-[0.2em] font-bold text-muted-foreground mb-2">
           Get in Touch
@@ -78,7 +79,7 @@ export default function Contact() {
         </p>
       </div>
 
-      <div className="max-w-4xl mx-auto">
+      <div>
         <Card className="bg-background border-none shadow-2xl overflow-hidden">
           <div className="grid md:grid-cols-2">
             {/* Left panel — contact info */}
@@ -237,6 +238,7 @@ export default function Contact() {
             </div>
           </div>
         </Card>
+      </div>
       </div>
     </section>
   );

@@ -3,7 +3,8 @@ import { EXPERIENCES } from "../data";
 
 export default function Experience() {
   return (
-    <section className="container mx-auto px-4 py-24">
+    <section className="px-4 py-24">
+      <div className="max-w-3xl mx-auto">
       <div className="mb-12">
         <p className="text-xs uppercase tracking-[0.2em] font-bold text-muted-foreground mb-2">
           Career
@@ -14,7 +15,7 @@ export default function Experience() {
         </p>
       </div>
 
-      <div className="max-w-3xl mx-auto relative pl-8 space-y-12 border-l-2 border-primary/30 py-2">
+      <div className="relative pl-8 space-y-12 border-l-2 border-primary/30 py-2">
         {EXPERIENCES.map((exp) => (
           <motion.div
             key={`${exp.company}-${exp.period}`}
@@ -44,6 +45,7 @@ export default function Experience() {
             </div>
           </motion.div>
         ))}
+      </div>
       </div>
     </section>
   );

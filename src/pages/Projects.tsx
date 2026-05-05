@@ -59,7 +59,8 @@ function ProjectPreview({
 
 export default function Projects() {
   return (
-    <section className="container mx-auto px-4 py-24">
+    <section className="px-4 py-24">
+      <div className="max-w-5xl mx-auto">
       <div className="mb-12">
         <p className="text-xs uppercase tracking-[0.2em] font-bold text-muted-foreground mb-2">
           Portfolio
@@ -114,6 +115,7 @@ export default function Projects() {
             </Card>
           </motion.div>
         ))}
+      </div>
       </div>
     </section>
   );
