@@ -31,9 +31,9 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+      <div className="relative container mx-auto px-4 h-16 flex items-center">
+        {/* Logo — flex-1 so it mirrors the right side and keeps links centred */}
+        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex flex-1">
           <Link
             to="/"
             className="flex items-center gap-2 font-bold text-xl tracking-tighter"
@@ -45,8 +45,8 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
           </Link>
         </motion.div>
 
-        {/* Desktop nav links */}
-        <div className="hidden md:flex items-center gap-6 text-sm font-medium">
+        {/* Desktop nav links — pinned to horizontal centre of the bar */}
+        <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-6 text-sm font-medium">
           {navLinks.map((link) => (
             <Link
               key={link.to}
@@ -62,8 +62,8 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
           ))}
         </div>
 
-        {/* Right controls */}
-        <div className="flex items-center gap-2">
+        {/* Right controls — flex-1 + justify-end mirrors the logo side */}
+        <div className="flex flex-1 justify-end items-center gap-2">
           {/* Hackathon mode toggle */}
           <Button
             variant={isHackathonMode ? "default" : "outline"}
@@ -97,7 +97,7 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
           <Button
             variant="outline"
             size="sm"
-            className="hidden sm:flex gap-2"
+            className="hidden sm:flex gap-1.5"
             asChild
           >
             <a
@@ -106,8 +106,8 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
               rel="noopener noreferrer"
               title="View LinkedIn profile"
             >
-              <FileText size={16} />
-              View Profile
+              <FileText size={15} />
+              CV
             </a>
           </Button>
 

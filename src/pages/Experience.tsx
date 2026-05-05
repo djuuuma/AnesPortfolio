@@ -14,7 +14,7 @@ export default function Experience() {
         </p>
       </div>
 
-      <div className="max-w-3xl relative pl-8 space-y-12 border-l-2 border-primary/30 py-2">
+      <div className="max-w-3xl mx-auto relative pl-8 space-y-12 border-l-2 border-primary/30 py-2">
         {EXPERIENCES.map((exp) => (
           <motion.div
             key={`${exp.company}-${exp.period}`}

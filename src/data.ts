@@ -27,25 +27,29 @@ export const PROJECTS: Project[] = [
     title: "Zrno",
     description: "Digital online menu for UR Caffe Bar & Slastičarnica Zrno in Sarajevo. Showcases the café's philosophy, full menu, opening hours, and location.",
     link: "https://zrno-liard.vercel.app",
-    tags: ["React", "Online Menu", "Local Business", "UI/UX"]
+    tags: ["React", "Online Menu", "Local Business", "UI/UX"],
+    image: "https://image.thum.io/get/width/800/crop/600/https://zrno-liard.vercel.app"
   },
   {
     title: "Dr. SK Ordinacija",
     description: "Patient-facing website for Dr. Sanela Kapić's dental clinic. Presents services, clinic information, and contact details with a clean, trustworthy interface.",
     link: "https://dr-sk-ordinacija.vercel.app/",
-    tags: ["Next.js", "Dental Clinic", "Web App", "SEO"]
+    tags: ["Next.js", "Dental Clinic", "Web App", "SEO"],
+    image: "https://image.thum.io/get/width/800/crop/600/https://dr-sk-ordinacija.vercel.app/"
   },
   {
     title: "Foto Đumišić V2",
     description: "Wedding and family photography studio website for Foto Đumišić in Sarajevo. Features immersive galleries, service categories, and a booking inquiry form.",
     link: "https://foto-djumisic-v2.vercel.app/",
-    tags: ["React", "Photography", "Portfolio", "Image Optimization"]
+    tags: ["React", "Photography", "Portfolio", "Image Optimization"],
+    image: "https://image.thum.io/get/width/800/crop/600/https://foto-djumisic-v2.vercel.app/"
   },
   {
     title: "MSN Design",
     description: "Business website for MSN Design — a Sarajevo studio specialising in direct print on glass and ceramics. Targets HoReCa clients and B2B branding projects.",
     link: "https://msn-design.vercel.app/",
-    tags: ["Business Website", "Branding", "Web App", "B2B"]
+    tags: ["Business Website", "Branding", "Web App", "B2B"],
+    image: "https://image.thum.io/get/width/800/crop/600/https://msn-design.vercel.app/"
   }
 ];
 

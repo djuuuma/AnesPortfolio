@@ -78,7 +78,7 @@ export default function Contact() {
         </p>
       </div>
 
-      <div className="max-w-4xl">
+      <div className="max-w-4xl mx-auto">
         <Card className="bg-background border-none shadow-2xl overflow-hidden">
           <div className="grid md:grid-cols-2">
             {/* Left panel — contact info */}
