@@ -28,6 +28,68 @@ import SVGPathCommander from "svg-path-commander"
 
 import { cn } from "@/lib/utils"
 
+/** Matter.Mouse implements these at runtime; @types/matter-js omits them. */
+type MatterMouseDomHandlers = {
+  mousedown: (event: MouseEvent | TouchEvent) => void
+  mousemove: (event: MouseEvent | TouchEvent) => void
+  mouseup: (event: MouseEvent | TouchEvent) => void
+}
+
+/**
+ * Feed pointer input through Matter.Mouse's own handlers so positions use the
+ * same math as _getRelativeMousePosition (pageX/scroll + canvas backing-store
+ * scale). Setting mouse.position from clientX/rect alone breaks hit-tests on
+ * high-DPI / scaled canvases — especially on iOS Safari.
+ */
+function forwardPointerToMatterMouse(
+  mouse: Matter.Mouse & MatterMouseDomHandlers,
+  e: PointerEvent,
+  phase: "down" | "move" | "up"
+) {
+  const touchLike = e.pointerType === "touch" || e.pointerType === "pen"
+
+  const asTouchList = (): TouchList => {
+    const touch = {
+      identifier: e.pointerId,
+      target: e.target as EventTarget,
+      clientX: e.clientX,
+      clientY: e.clientY,
+      screenX: e.screenX,
+      screenY: e.screenY,
+      pageX: e.pageX,
+      pageY: e.pageY,
+      radiusX: 0,
+      radiusY: 0,
+      rotationAngle: 0,
+      force: 0,
+    } as Touch
+    return {
+      length: 1,
+      item: (index: number) => (index === 0 ? touch : null),
+      [Symbol.iterator]: function* () {
+        yield touch
+      },
+    } as unknown as TouchList
+  }
+
+  if (touchLike) {
+    const synthetic = {
+      changedTouches: asTouchList(),
+      touches: phase === "up" ? asTouchList() : asTouchList(),
+      preventDefault: () => e.preventDefault(),
+      stopPropagation: () => e.stopPropagation(),
+    } as unknown as TouchEvent
+
+    if (phase === "down") mouse.mousedown(synthetic)
+    else if (phase === "move") mouse.mousemove(synthetic)
+    else mouse.mouseup(synthetic)
+  } else {
+    if (phase === "down") mouse.mousedown(e as unknown as MouseEvent)
+    else if (phase === "move") mouse.mousemove(e as unknown as MouseEvent)
+    else mouse.mouseup(e as unknown as MouseEvent)
+  }
+}
+
 function parsePathToVertices(path: string, sampleLength = 15) {
   const commander = new SVGPathCommander(path)
 
@@ -194,6 +256,9 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
     const frameId = useRef<number | null>(null)
     const mouseConstraint = useRef<Matter.MouseConstraint | null>(null)
     const mouseDown = useRef(false)
+    const pointerDownHandler = useRef<((e: PointerEvent) => void) | null>(null)
+    const pointerMoveHandler = useRef<((e: PointerEvent) => void) | null>(null)
+    const pointerUpHandler = useRef<((e: PointerEvent) => void) | null>(null)
     const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 })
 
     const isRunning = useRef(false)
@@ -334,7 +399,19 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
         },
       })
 
-      const mouse = Mouse.create(render.current.canvas)
+      // Mobile/touch: ensure dragging doesn't get swallowed by page scrolling.
+      // Matter.js uses touch events under the hood, but browsers may treat the
+      // interaction as a pan/scroll unless touch-action is disabled.
+      canvas.current.style.touchAction = "none"
+      ;(canvas.current.style as unknown as { msTouchAction?: string }).msTouchAction =
+        "none"
+      render.current.canvas.style.touchAction = "none"
+      ;(render.current.canvas.style as unknown as { msTouchAction?: string }).msTouchAction =
+        "none"
+
+      const mouse = Mouse.create(render.current.canvas) as Matter.Mouse &
+        MatterMouseDomHandlers
+
       mouseConstraint.current = MouseConstraint.create(engine.current, {
         mouse,
         constraint: {
@@ -344,6 +421,53 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
           },
         },
       })
+
+      // Pointer Events: forward through Matter.Mouse so coords match Physics/canvas scaling.
+      const canvasEl = render.current.canvas
+
+      const onPointerDown = (e: PointerEvent) => {
+        // Primary button / first touch only
+        if (!e.isPrimary) return
+        if (e.pointerType === "touch" || e.pointerType === "pen") {
+          e.preventDefault()
+        }
+        try {
+          canvasEl.setPointerCapture(e.pointerId)
+        } catch {}
+        forwardPointerToMatterMouse(mouse, e, "down")
+      }
+
+      const onPointerMove = (e: PointerEvent) => {
+        forwardPointerToMatterMouse(mouse, e, "move")
+        const dragging =
+          !!mouseConstraint.current?.body || mouse.button === 0
+        if (
+          dragging &&
+          (e.pointerType === "touch" || e.pointerType === "pen")
+        ) {
+          e.preventDefault()
+        }
+      }
+
+      const onPointerUp = (e: PointerEvent) => {
+        if (!e.isPrimary) return
+        if (e.pointerType === "touch" || e.pointerType === "pen") {
+          e.preventDefault()
+        }
+        forwardPointerToMatterMouse(mouse, e, "up")
+        try {
+          canvasEl.releasePointerCapture(e.pointerId)
+        } catch {}
+      }
+
+      pointerDownHandler.current = onPointerDown
+      pointerMoveHandler.current = onPointerMove
+      pointerUpHandler.current = onPointerUp
+
+      canvasEl.addEventListener("pointerdown", onPointerDown, { passive: false })
+      canvasEl.addEventListener("pointermove", onPointerMove, { passive: false })
+      canvasEl.addEventListener("pointerup", onPointerUp, { passive: false })
+      canvasEl.addEventListener("pointercancel", onPointerUp, { passive: false })
 
       const walls = [
         Bodies.rectangle(width / 2, height + 10, width, 20, {
@@ -453,6 +577,31 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
 
       if (render.current) {
         Mouse.clearSourceEvents(render.current.mouse)
+        if (pointerDownHandler.current) {
+          render.current.canvas.removeEventListener(
+            "pointerdown",
+            pointerDownHandler.current
+          )
+          pointerDownHandler.current = null
+        }
+        if (pointerMoveHandler.current) {
+          render.current.canvas.removeEventListener(
+            "pointermove",
+            pointerMoveHandler.current
+          )
+          pointerMoveHandler.current = null
+        }
+        if (pointerUpHandler.current) {
+          render.current.canvas.removeEventListener(
+            "pointerup",
+            pointerUpHandler.current
+          )
+          render.current.canvas.removeEventListener(
+            "pointercancel",
+            pointerUpHandler.current
+          )
+          pointerUpHandler.current = null
+        }
         Render.stop(render.current)
         render.current.canvas.remove()
       }
