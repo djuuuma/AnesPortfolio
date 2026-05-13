@@ -1,4 +1,10 @@
-import { useState, useEffect } from "react";
+import {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  type MouseEvent,
+} from "react";
+import { flushSync } from "react-dom";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { Code2, FileText, Moon, Sun, Menu, X, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -44,7 +50,13 @@ const navLinks = [
   { label: "Contact", to: "/contact" },
 ];
 
-function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => void }) {
+function Navbar({
+  dark,
+  onToggleDark,
+}: {
+  dark: boolean;
+  onToggleDark: (e: MouseEvent<HTMLButtonElement>) => void;
+}) {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { isHackathonMode, toggle: toggleHackathon } = useHackathonMode();
@@ -110,7 +122,7 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setDark(!dark)}
+              onClick={onToggleDark}
               aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
             >
               {dark ? <Sun size={18} /> : <Moon size={18} />}
@@ -205,16 +217,54 @@ function Layout() {
     } catch {}
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
   }, [dark]);
+
+  const handleThemeToggle = (e: MouseEvent<HTMLButtonElement>) => {
+    const next = !dark;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      updateDark(next);
+      return;
+    }
+
+    const btn = e.currentTarget;
+    const rect = btn.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    const radius =
+      Math.hypot(
+        Math.max(x, window.innerWidth - x),
+        Math.max(y, window.innerHeight - y),
+      ) + 32;
+
+    const vt = document.startViewTransition;
+    if (!vt) {
+      updateDark(next);
+      return;
+    }
+
+    document.documentElement.style.setProperty("--theme-vt-x", `${x}px`);
+    document.documentElement.style.setProperty("--theme-vt-y", `${y}px`);
+    document.documentElement.style.setProperty("--theme-vt-r", `${radius}px`);
+
+    void (async () => {
+      try {
+        await vt(() => {
+          flushSync(() => updateDark(next));
+        }).finished;
+      } catch {
+        updateDark(next);
+      }
+    })();
+  };
 
   return (
     <MotionConfig reducedMotion="user">
       <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary selection:text-primary-foreground">
         <ScrollToTop />
         <GlitchTransition />
-        <Navbar dark={dark} setDark={updateDark} />
+        <Navbar dark={dark} onToggleDark={handleThemeToggle} />
         <AnimatedRoutes />
         <footer className="py-12 border-t">
           <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">

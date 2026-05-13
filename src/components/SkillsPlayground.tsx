@@ -17,6 +17,8 @@ const skills = [
   { label: "Python",          x: "75%", y: "42%", angle: -3, color: "bg-[#facc15] text-black hackathon:bg-foreground hackathon:text-background" },
   { label: "Google Sheets",   x: "32%", y: "60%", angle: 2,  color: "bg-[#16a34a] text-white hackathon:bg-foreground hackathon:text-background" },
   { label: "Microsoft Excel", x: "65%", y: "60%", angle: -5, color: "bg-[#107c41] text-white hackathon:bg-foreground hackathon:text-background" },
+  { label: "C",               x: "28%", y: "76%", angle: 3,  color: "bg-[#283593] text-white hackathon:bg-foreground hackathon:text-background" },
+  { label: "C++",             x: "50%", y: "76%", angle: -2, color: "bg-[#00599C] text-white hackathon:bg-foreground hackathon:text-background" },
 ];
 
 export default function SkillsPlayground() {

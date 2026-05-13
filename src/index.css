@@ -118,6 +118,17 @@
     --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Theme toggle: smooth live color drift (no fullscreen snapshot layer). Toggled from JS for ~800ms. */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-color-flux,
+  html.theme-color-flux * {
+    transition-property: background-color, color, border-color, outline-color, fill, stroke,
+      text-decoration-color, box-shadow;
+    transition-duration: 0.75s;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

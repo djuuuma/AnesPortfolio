@@ -26,9 +26,17 @@ export const PROJECTS: Project[] = [
   {
     title: "Zrno",
     description: "Digital online menu for UR Caffe Bar & Slastičarnica Zrno in Sarajevo. Showcases the café's philosophy, full menu, opening hours, and location.",
-    link: "https://zrno-liard.vercel.app",
+    link: "https://zrno-online-menu.vercel.app/",
     tags: ["React", "Online Menu", "Local Business", "UI/UX"],
     image: "/zrno.png",
+  },
+  {
+    title: "Guerilla Intel",
+    description:
+      "Lineup reference web app — browse and compare roster-style lineups in a focused, readable layout.",
+    link: "https://smokovi-za-kanter.vercel.app/",
+    tags: ["React", "Reference Tool", "UI/UX", "Vercel"],
+    image: "/gurilla%20intel.png",
   },
   {
     title: "Dr. SK Ordinacija",

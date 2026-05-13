@@ -13,7 +13,7 @@ const SkillsPlayground = lazy(() => import("../components/SkillsPlayground"));
 const AVATAR_SRC = "/anesphoto.png";
 
 const stats = [
-  { label: "Client Projects", value: "4+", icon: FolderGit2 },
+  { label: "Client Projects", value: "5+", icon: FolderGit2 },
   { label: "Years of Experience", value: "2+", icon: Clock },
   { label: "Clients Served", value: "4+", icon: Users },
   { label: "Technologies", value: "10+", icon: Layers },
