@@ -10,6 +10,7 @@ import { Code2, FileText, Moon, Sun, Menu, X, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence, MotionConfig } from "motion/react";
 
+import { Analytics } from "@vercel/analytics/react";
 import { HackathonProvider, useHackathonMode } from "./context/HackathonContext";
 import GlitchTransition from "./components/GlitchTransition";
 import ScrollToTop from "./components/ScrollToTop";
@@ -300,6 +301,7 @@ export default function App() {
   return (
     <HackathonProvider>
       <Layout />
+      <Analytics />
     </HackathonProvider>
   );
 }
